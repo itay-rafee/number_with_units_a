@@ -27,3 +27,8 @@ tidy:
 
 clean:
 	rm -f *.o demo test
+
+git:
+	git add --all
+	git commit -m "$m"
+	git push
