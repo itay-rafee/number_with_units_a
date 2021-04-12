@@ -80,12 +80,12 @@ namespace ariel
 
     ostream &operator<<(ostream &out, const NumberWithUnits &t)
     {
-        return (out << t._n << "[" + t._s + "]");
+        return (out << t._num << "[" + t._unit + "]");
     }
     istream &operator>>(istream &input, NumberWithUnits &t)
     {
         char ch;
-        return (input >> t._n >> ch >> t._s >> ch);
+        return (input >> t._num >> ch >> t._unit >> ch);
     }
     NumberWithUnits operator+=(NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
@@ -99,142 +99,142 @@ namespace ariel
     }
     NumberWithUnits operator*=(NumberWithUnits &num, float n)
     {
-        num._n *= n;
+        num._num *= n;
         return num;
     }
     NumberWithUnits operator*=(float n, NumberWithUnits &num)
     {
-        num._n *= n;
+        num._num *= n;
         return num;
     }
     NumberWithUnits operator++(NumberWithUnits &num)
     {
-        num._n++;
+        num._num++;
         return num;
     }
     NumberWithUnits operator++(NumberWithUnits &num, int)
     {
         NumberWithUnits copy = num;
-        num._n++;
+        num._num++;
         return copy;
     }
     NumberWithUnits operator--(NumberWithUnits &num)
     {
-        num._n--;
+        num._num--;
         return num;
     }
     NumberWithUnits operator--(NumberWithUnits &num, int)
     {
         NumberWithUnits copy = num;
-        num._n--;
+        num._num--;
         return copy;
     }
 
     const NumberWithUnits operator*(NumberWithUnits &num, float n)
     {
-        return NumberWithUnits{num._n * n, num._s};
+        return NumberWithUnits{num._num * n, num._unit};
     }
     const NumberWithUnits operator*(float n, NumberWithUnits &num)
     {
-        return NumberWithUnits{num._n * n, num._s};
+        return NumberWithUnits{num._num * n, num._unit};
     }
     const NumberWithUnits operator-(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float newNum = num_1._n - units_sign[num_2._s][num_1._s] * num_2._n;
-            return NumberWithUnits{newNum, num_1._s};
+            float newNum = num_1._num - units_sign[num_2._unit][num_1._unit] * num_2._num;
+            return NumberWithUnits{newNum, num_1._unit};
         }
-        // throw error or something
+        throw exception();
     }
     const NumberWithUnits operator-(const NumberWithUnits &num)
     {
-        return NumberWithUnits{-num._n, num._s};
+        return NumberWithUnits{-num._num, num._unit};
     }
     const NumberWithUnits operator+(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float newNum = num_1._n + units_sign[num_2._s][num_1._s] * num_2._n;
-            return NumberWithUnits{newNum, num_1._s};
+            float newNum = num_1._num + units_sign[num_2._unit][num_1._unit] * num_2._num;
+            return NumberWithUnits{newNum, num_1._unit};
         }
-        // throw error or something
+        throw exception();
     }
     const NumberWithUnits operator+(const NumberWithUnits &num, float n)
     {
-        return NumberWithUnits{num._n + n, num._s};
+        return NumberWithUnits{num._num + n, num._unit};
     }
     bool operator>(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float n_2 = units_sign[num_2._s][num_1._s] * num_2._n;
-            if (num_1._n > n_2)
+            float n_2 = units_sign[num_2._unit][num_1._unit] * num_2._num;
+            if (num_1._num > n_2)
             {
                 return true;
             }
             return false;
         }
-        // throw error or something
+        throw exception();
     }
     bool operator>=(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float n_2 = units_sign[num_2._s][num_1._s] * num_2._n;
-            if (num_1._n >= n_2)
+            float n_2 = units_sign[num_2._unit][num_1._unit] * num_2._num;
+            if (num_1._num >= n_2)
             {
                 return true;
             }
             return false;
         }
-        // throw error or something
+        throw exception();
     }
     bool operator<(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float n_2 = units_sign[num_2._s][num_1._s] * num_2._n;
-            if (num_1._n < n_2)
+            float n_2 = units_sign[num_2._unit][num_1._unit] * num_2._num;
+            if (num_1._num < n_2)
             {
                 return true;
             }
             return false;
         }
-        // throw error or something
+        throw exception();
     }
     bool operator<=(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float n_2 = units_sign[num_2._s][num_1._s] * num_2._n;
-            if (num_1._n <= n_2)
+            float n_2 = units_sign[num_2._unit][num_1._unit] * num_2._num;
+            if (num_1._num <= n_2)
             {
                 return true;
             }
             return false;
         }
-        // throw error or something
+        throw exception();
     }
     bool operator==(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float n_2 = units_sign[num_2._s][num_1._s] * num_2._n;
-            if (num_1._n == n_2)
+            float n_2 = units_sign[num_2._unit][num_1._unit] * num_2._num;
+            if (num_1._num == n_2)
             {
                 return true;
             }
             return false;
         }
-        // throw error or something
+        throw exception();
     }
     bool operator!=(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
-        if (contain(num_1._s, num_2._s))
+        if (contain(num_1._unit, num_2._unit))
         {
-            float n_2 = units_sign[num_2._s][num_1._s] * num_2._n;
-            if (num_1._n != n_2)
+            float n_2 = units_sign[num_2._unit][num_1._unit] * num_2._num;
+            if (num_1._num != n_2)
             {
                 return true;
             }
@@ -242,7 +242,7 @@ namespace ariel
         }
         return false;
 
-        // throw error or something
+        throw exception();
     }
 
 }

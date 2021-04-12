@@ -7,11 +7,11 @@ namespace ariel
     class NumberWithUnits
     {
     private:
-        float _n;
-        string _s;
+        float _num;
+        string _unit;
 
     public:
-        NumberWithUnits(float n, string s): _n(n),_s(s){}
+        NumberWithUnits(float n, string s): _num(n),_unit(s){}
         static void read_units(ifstream &units_file);
         friend ostream &operator<<(ostream &out, const NumberWithUnits &t);
         friend istream &operator>>(istream &in, NumberWithUnits &t);
