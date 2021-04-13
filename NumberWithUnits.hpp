@@ -17,8 +17,8 @@ namespace ariel
     public:
         float _num;
         string _unit;
-
         NumberWithUnits(float n, string s): _num(n),_unit(std::move(s)){}
+        // NumberWithUnits(NumberWithUnits &n):_num(n._num), _unit(std::move(n._unit)){}
         static void read_units(ifstream &units_file);
         friend ostream &operator<<(ostream &out, const NumberWithUnits &t);
         friend istream &operator>>(istream &in, NumberWithUnits &t);

@@ -9,7 +9,7 @@ using namespace ariel;
 #include <sstream>
 using namespace std;
 
-const int zero = 0, one = 1, ten = 10, hundred = 100, thousand = 1000;
+const float zero = 0, one = 1, two = 2, ten = 10, hundred = 100, thousand = 1000;
 
 TEST_CASE("Operators")
 {
@@ -24,18 +24,18 @@ TEST_CASE("Operators")
     NumberWithUnits c{ten, "min"};
 
     /* Operators: ==, !=, >=, <=, <, > */
-    CHECK(a == NumberWithUnits{a});
+    CHECK(a == NumberWithUnits{ten, "kg"});
     CHECK(a == NumberWithUnits{ten * thousand, "g"});
     CHECK(a == NumberWithUnits{one / hundred, "ton"});
-    CHECK(a >= NumberWithUnits{a} + one);
-    CHECK(a > NumberWithUnits{a} + one);
-    CHECK(a > NumberWithUnits{thousand, "g"});
+    CHECK(a <= NumberWithUnits{ten, "kg"} + one);
+    CHECK(a < NumberWithUnits{ten, "kg"} + one);
+    CHECK(a >= NumberWithUnits{thousand, "g"});
     CHECK(a > NumberWithUnits{one / thousand, "ton"});
-    CHECK(b == NumberWithUnits{b});
+    CHECK(b == NumberWithUnits{ten, "m"});
     CHECK(b == NumberWithUnits{thousand, "cm"});
     CHECK(b == NumberWithUnits{one / hundred, "km"});
-    CHECK(c >= NumberWithUnits{c} + one);
-    CHECK(c > NumberWithUnits{c} + one);
+    CHECK(c <= NumberWithUnits{ten, "min"} + one);
+    CHECK(c < NumberWithUnits{ten, "min"} + one);
     CHECK(b < (b + NumberWithUnits{one, "cm"}));
     CHECK(b < NumberWithUnits{one / ten, "km"});
 
@@ -54,9 +54,9 @@ TEST_CASE("Operators")
     CHECK(b == NumberWithUnits{ten, "m"});
     CHECK(c == NumberWithUnits{ten, "min"});
 
-    a *= 2;
-    b *= 2;
-    c *= 2;
+    a *= two;
+    b *= two;
+    c *= two;
     CHECK(a == NumberWithUnits{ten + ten, "kg"});
     CHECK(b == NumberWithUnits{ten + ten, "m"});
     CHECK(c == NumberWithUnits{ten + ten, "min"});
@@ -78,9 +78,9 @@ TEST_CASE("Operators")
     a++;
     b++;
     c++;
-    CHECK(a == NumberWithUnits{ten + one, "kg"});
-    CHECK(b == NumberWithUnits{ten + one, "m"});
-    CHECK(c == NumberWithUnits{ten + one, "min"});
+    CHECK(a == NumberWithUnits{ten + ten + one, "kg"});
+    CHECK(b == NumberWithUnits{ten + ten + one, "m"});
+    CHECK(c == NumberWithUnits{ten + ten + one, "min"});
 
     a--;
     b--;
@@ -89,12 +89,12 @@ TEST_CASE("Operators")
     CHECK(b == NumberWithUnits{ten + ten, "m"});
     CHECK(c == NumberWithUnits{ten + ten, "min"});
 
-    a = a * 2;
-    b = 2 * b;
-    c = c * 2;
-    CHECK(a == NumberWithUnits{ten + ten, "kg"});
-    CHECK(b == NumberWithUnits{ten + ten, "m"});
-    CHECK(c == NumberWithUnits{ten + ten, "min"});
+    a = a * two;
+    b = two * b;
+    c = c * two;
+    CHECK(a == NumberWithUnits{two * (ten + ten), "kg"});
+    CHECK(b == NumberWithUnits{two * (ten + ten), "m"});
+    CHECK(c == NumberWithUnits{two * (ten + ten), "min"});
 
     /* delete the file */
     if (remove(filename) != zero)

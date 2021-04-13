@@ -8,15 +8,12 @@
 
 using namespace std;
 
-// map<string,string> couples;
-//map<string, map<string, float>> units_sign;
-// map<string,string>::iterator it1;
 const int zero = 0, one = 1, two = 2;
 
 namespace ariel
 {
     /* check if the unit fit */
-    bool contain(const string& unit1, const string& unit2)
+    bool contain(const string &unit1, const string &unit2)
     {
         if (units_sign.find(unit1) != units_sign.end())
         {
@@ -28,9 +25,9 @@ namespace ariel
         return false;
     }
 
-    array<string, two> split( string& s,  string& delimiter)
+    array<string, two> split(string &s, string &delimiter)
     {
-        size_t pos=zero;
+        size_t pos = zero;
         string token;
         if ((pos = s.find(delimiter)) != string::npos)
         {
@@ -41,10 +38,10 @@ namespace ariel
         return {"", ""};
     }
 
-    void set_neighbors(string& s1, string& s2, float num)
+    void set_neighbors(string &s1, string &s2, float num)
     {
         map<string, float> m = units_sign[s2];
-        for (auto & it : m)
+        for (auto &it : m)
         {
             units_sign[s1][it.first] = num * it.second;
         }
@@ -54,8 +51,8 @@ namespace ariel
     {
         string delimiter_1 = " = ";
         string delimiter_2 = " ";
-        float n1 =0;
-        float n2=0;
+        float n1 = 0;
+        float n2 = 0;
         string token;
         string s1;
         string s2;
@@ -65,12 +62,13 @@ namespace ariel
         geek >> n1;
         s1 = sp2.at(one);
         sp2 = split(sp.at(one), delimiter_2);
-        geek >> n2;
+        stringstream geek2(sp2.at(zero));
+        geek2 >> n2;
         s2 = sp2.at(one);
-        units_sign[s1][s2] = n1 / n2;
-        units_sign[s2][s1] = n2 / n1;
-        set_neighbors(s1, s2, n1 / n2);
-        set_neighbors(s2, s1, n2 / n1);
+        units_sign[s1][s2] = n2 / n1;
+        units_sign[s2][s1] = n1 / n2;
+        set_neighbors(s1, s2, n2 / n1);
+        set_neighbors(s2, s1, n1 / n2);
     }
 
     void NumberWithUnits::read_units(ifstream &units_file)
@@ -89,7 +87,7 @@ namespace ariel
     }
     istream &operator>>(istream &input, NumberWithUnits &t)
     {
-        char ch =0;
+        char ch = 0;
         return (input >> t._num >> ch >> t._unit >> ch);
     }
     NumberWithUnits operator+=(NumberWithUnits &num_1, const NumberWithUnits &num_2)
@@ -150,7 +148,7 @@ namespace ariel
             float newNum = num_1._num - units_sign[num_2._unit][num_1._unit] * num_2._num;
             return NumberWithUnits{newNum, num_1._unit};
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     NumberWithUnits operator-(const NumberWithUnits &num)
     {
@@ -163,7 +161,7 @@ namespace ariel
             float newNum = num_1._num + units_sign[num_2._unit][num_1._unit] * num_2._num;
             return NumberWithUnits{newNum, num_1._unit};
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     NumberWithUnits operator+(const NumberWithUnits &num, float n)
     {
@@ -181,7 +179,7 @@ namespace ariel
             }
             return ans;
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     bool operator>=(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
@@ -195,7 +193,7 @@ namespace ariel
             }
             return ans;
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     bool operator<(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
@@ -209,7 +207,7 @@ namespace ariel
             }
             return ans;
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     bool operator<=(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
@@ -223,7 +221,7 @@ namespace ariel
             }
             return ans;
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     bool operator==(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
@@ -237,7 +235,7 @@ namespace ariel
             }
             return ans;
         }
-        throw exception();
+        throw invalid_argument("not same unit");
     }
     bool operator!=(const NumberWithUnits &num_1, const NumberWithUnits &num_2)
     {
@@ -252,44 +250,49 @@ namespace ariel
             return ans;
         }
 
-        throw exception();
+        throw invalid_argument("not same unit");
     }
 
-
+    // NumberWithUnits::NumberWithUnits(float n, string s): _num(n),_unit(std::move(s)){}
+    // NumberWithUnits::NumberWithUnits(NumberWithUnits &n):_num(n._num), _unit(std::move(n._unit)){}
 }
 
 // using namespace ariel;
-// int main() {
+// int main()
+// {
 //     char filename[] = "units.txt";
-// //    ofstream units_f(filename);
-// //    units_f << "1 km = 1000 m\n1 m = 100 cm\n1 kg = 1000 g\n1 ton = 1000 kg\n1 hour = 60 min\n1 min = 60 sec\n1 USD = 3.33 ILS";
-// //    units_f.close();
+// //        ofstream units_f(filename);
+// //        units_f << "1 km = 1000 m\n1 m = 100 cm\n1 kg = 1000 g\n1 ton = 1000 kg\n1 hour = 60 min\n1 min = 60 sec\n1 USD = 3.33 ILS";
+// //        units_f.close();
 //     ifstream units_file{filename};
 //     NumberWithUnits::read_units(units_file);
 
-//     NumberWithUnits a{2, "km"};   // 2 kilometers
-//     cout << a << endl;           // Prints "2[km]".
-//     cout << (-a) << endl;    // Prints "-2[km]"
-//     cout << (3*a) << endl;    // Prints "6[km]"
+//     NumberWithUnits a{2, "km"}; // 2 kilometers
+//     cout << a << endl;          // Prints "2[km]".
+//     cout << (-a) << endl;       // Prints "-2[km]"
+//     cout << (3 * a) << endl;    // Prints "6[km]"
 
-//     NumberWithUnits b{300, "m"};  // 300 meters
-//     cout << (a+b) << endl;   // Prints "2.3[km]". Note: units are determined by first number (a).
-//     cout << (b-a) << endl;   // Prints "-1700[m]". Note: units are determined by first number (b).
+//     NumberWithUnits b{300, "m"}; // 300 meters
+//     cout << (a + b) << endl;     // Prints "2.3[km]". Note: units are determined by first number (a).
+//     cout << (b - a) << endl;     // Prints "-1700[m]". Note: units are determined by first number (b).
 
-//     cout << boolalpha; // print booleans as strings from now on:
-//     cout << (a>b) << endl;  // Prints "true"
-//     cout << (a<=b) << endl;  // Prints "false"
-//     cout << (a==NumberWithUnits{2000, "m"}) << endl;  // Prints "true"
+//     cout << boolalpha;                                 // print booleans as strings from now on:
+//     cout << (a > b) << endl;                           // Prints "true"
+//     cout << (a <= b) << endl;                          // Prints "false"
+//     cout << (a == NumberWithUnits{2000, "m"}) << endl; // Prints "true"
 
 //     istringstream sample_input{"700 [ kg ]"};
 //     sample_input >> a;
-//     cout << a << endl;   // Prints "700[kg]"
-//     cout << (a += NumberWithUnits{1, "ton"}) << endl;  // prints "1700[kg]"
-//     cout << a << endl;   // Prints "1700[kg]". Note that a has changed.
+//     cout << a << endl;                                // Prints "700[kg]"
+//     cout << (a += NumberWithUnits{1, "ton"}) << endl; // prints "1700[kg]"
+//     cout << a << endl;                                // Prints "1700[kg]". Note that a has changed.
 
-//     try {
-//         cout << (a+b) << endl;
-//     } catch (const std::exception& ex) {
+//     try
+//     {
+//         cout << (a + b) << endl;
+//     }
+//     catch (const std::exception &ex)
+//     {
 //         cout << ex.what() << endl; // Prints "Units do not match - [m] cannot be converted to [kg]"
 //     }
 //     cout << "End of demo!" << endl;
